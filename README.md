@@ -18,12 +18,12 @@ To run:
 
 ## After:
 
-To pre-process only, generating a `.pre` file:
+To preprocess only, generating a `.pre` file:
 ```
-./montador -p myprogram.asm
+./montador -p assemble_program.asm
 ```
 
-To pre-process only, generating a `.obj`:
+To preprocess only, generating a `.obj`:
 ```
-./montador -o
+./montador -o preprocess_file.pre
 ```
