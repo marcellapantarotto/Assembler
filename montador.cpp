@@ -7,35 +7,29 @@ using namespace std;
 
 ifstream read_input_file(string filePath);
 void input_format();
+void preprocess();
 
 int main(int argc, char *argv[])
 {
-
-    // cout << "You have entered " << argc << " arguments:"
-    //      << "\n";
-
-    // for (int i = 0; i < argc; ++i)
-    //     cout << argv[i] << "\n";
-
-    // cout << "\n";
-
     if (argc != 3)
     {
-        cout << "Input with the wrong amount of parameters!\n";
+        cout << "Input with the wrong amount of parameters!" << endl;
         input_format();
         return 1;
     }
     else if (strncmp(argv[1], "-p", 2) == 0)
     {
-        cout << "-p\n";
+        preprocess();
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
-        cout << "-o\n";
+        cout << "-o" << endl;
     }
     else
     {
-        cout << "else\n";
+        cout << "Wrong type of input parameters!" << endl;
+        input_format();
+        return 1;
     }
 
     // read_input_file("examples/bin.asm");
@@ -43,15 +37,17 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void input_format(){
+void input_format()
+{
     cout << "\nRight input format:" << endl;
-    cout << "./montador -p assemble_program.asm \n   or\n./montador -o preprocess_file.pre\n";
+    cout << "./montador -p assemble_program.asm \n   or\n./montador -o preprocess_file.pre" << endl;
 }
 
 ifstream read_input_file(string filePath)
 {
     string line;
     ifstream myfile(filePath);
+
     if (myfile.is_open())
     {
         while (getline(myfile, line))
@@ -59,9 +55,12 @@ ifstream read_input_file(string filePath)
             cout << line << '\n';
         }
     }
-
     else
         cout << "Unable to open file";
 
     return myfile;
+}
+
+void preprocess(){
+    cout << "Preprocessing file!" << endl;
 }
