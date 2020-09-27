@@ -1,7 +1,6 @@
 # Assembler
 
 ## Universidade de Brasília (UnB) - Software Básico
-===
 
 <br/>
 To compile:
@@ -18,7 +17,6 @@ To run:
 <br/>
 
 ## After:
----
 
 To pre-process only, generating a `.pre` file:
 ```
