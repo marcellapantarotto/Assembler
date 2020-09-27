@@ -8,6 +8,7 @@ using namespace std;
 ifstream read_input_file(string filePath);
 void input_format();
 void preprocess();
+void assemble();
 
 int main(int argc, char *argv[])
 {
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
-        cout << "-o" << endl;
+        assemble();
     }
     else
     {
@@ -63,4 +64,8 @@ ifstream read_input_file(string filePath)
 
 void preprocess(){
     cout << "Preprocessing file!" << endl;
+}
+
+void assemble(){
+    cout << "Assembling file!" << endl;
 }
