@@ -6,10 +6,10 @@
 To compile:
 
 ```sh
-g++ assembler.cpp -o assembler
+g++ montador.cpp -o montador
 ```
 
 To run:
 ```
-./assembler
+./montador
 ```
