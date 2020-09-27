@@ -5,8 +5,9 @@
 
 using namespace std;
 
-ifstream read_input_file(string filePath);
 void input_format();
+ifstream read_input_file(string filePath);
+ofstream write_output_file(string inputFilePath, string outputFilePath);
 void preprocess();
 void assemble();
 
@@ -34,6 +35,7 @@ int main(int argc, char *argv[])
     }
 
     // read_input_file("examples/bin.asm");
+    write_output_file("examples/bin.asm", "output.txt");
 
     return 0;
 }
@@ -53,7 +55,7 @@ ifstream read_input_file(string filePath)
     {
         while (getline(myfile, line))
         {
-            cout << line << '\n';
+            cout << line << endl;
         }
     }
     else
@@ -62,10 +64,36 @@ ifstream read_input_file(string filePath)
     return myfile;
 }
 
-void preprocess(){
+ofstream write_output_file(string inputFilePath, string outputFilePath)
+{
+    ofstream outputFile(outputFilePath);
+    string line;
+    ifstream inputFile(inputFilePath);
+
+    if (outputFile.is_open())
+    {
+        while (getline(inputFile, line))
+        {
+            // cout << line << endl;
+            outputFile << line << endl;
+        }
+
+        outputFile.close();
+    }
+    else
+        cout << "Unable to open file";
+
+    return outputFile;
+}
+
+void preprocess()
+{
+    // pass file to extension .pre
     cout << "Preprocessing file!" << endl;
 }
 
-void assemble(){
+void assemble()
+{
+    // pass file to extension .obj
     cout << "Assembling file!" << endl;
 }
