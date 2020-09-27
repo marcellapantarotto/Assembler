@@ -6,8 +6,8 @@
 using namespace std;
 
 void input_format();
-ifstream read_input_file(string filePath);
-ofstream write_output_file(string inputFilePath, string outputFilePath);
+string read_input_file(string filePath, string data);
+void write_output_file(string inputFilePath, string outputFilePath);
 void preprocess();
 void assemble();
 
@@ -34,7 +34,10 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    // read_input_file("examples/bin.asm");
+    string data;
+    read_input_file("examples/bin.asm", data);
+    cout << data << endl;
+    
     write_output_file("examples/bin.asm", "output.txt");
 
     return 0;
@@ -46,7 +49,7 @@ void input_format()
     cout << "./montador -p assemble_program.asm \n   or\n./montador -o preprocess_file.pre" << endl;
 }
 
-ifstream read_input_file(string filePath)
+string read_input_file(string filePath, string data)
 {
     string line;
     ifstream myfile(filePath);
@@ -55,26 +58,27 @@ ifstream read_input_file(string filePath)
     {
         while (getline(myfile, line))
         {
-            cout << line << endl;
+
+            // cout << line << endl;
+            data += line;
         }
     }
     else
         cout << "Unable to open file";
 
-    return myfile;
+    return data;
 }
 
-ofstream write_output_file(string inputFilePath, string outputFilePath)
+void write_output_file(string inputFilePath, string outputFilePath)
 {
+    ifstream inputFile(inputFilePath);
     ofstream outputFile(outputFilePath);
     string line;
-    ifstream inputFile(inputFilePath);
-
+    
     if (outputFile.is_open())
     {
         while (getline(inputFile, line))
         {
-            // cout << line << endl;
             outputFile << line << endl;
         }
 
@@ -82,8 +86,6 @@ ofstream write_output_file(string inputFilePath, string outputFilePath)
     }
     else
         cout << "Unable to open file";
-
-    return outputFile;
 }
 
 void preprocess()

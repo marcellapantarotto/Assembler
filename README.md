@@ -3,25 +3,23 @@
 ## Universidade de Brasília (UnB) - Software Básico
 
 <br/>
-To compile:
+
+### To compile:
 
 ```sh
 g++ montador.cpp -o montador
 ```
 
-To run:
-```
-./montador
-```
-
 <br/>
 
-## After:
+### After:
 
 To preprocess only, generating a `.pre` file:
 ```
 ./montador -p assemble_program.asm
 ```
+
+OR
 
 To preprocess only, generating a `.obj`:
 ```
