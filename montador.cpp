@@ -1,15 +1,22 @@
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <cstring>
+#include <vector>
+#include <iomanip>
 
 using namespace std;
+const int size = 100;
 
 void input_format();
-string read_input_file(string filePath, string data);
+void read_input_file(string filePath);
 void write_output_file(string inputFilePath, string outputFilePath);
 void preprocess();
 void assemble();
+
+vector<vector<string>> program(size);
+
 
 int main(int argc, char *argv[])
 {
@@ -34,11 +41,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    string data;
-    read_input_file("examples/bin.asm", data);
-    cout << data << endl;
-    
-    write_output_file("examples/bin.asm", "output.txt");
+    read_input_file(argv[2]);
+    // write_output_file("examples/bin.asm", "output.txt");
 
     return 0;
 }
@@ -49,24 +53,37 @@ void input_format()
     cout << "./montador -p assemble_program.asm \n   or\n./montador -o preprocess_file.pre" << endl;
 }
 
-string read_input_file(string filePath, string data)
+void read_input_file(string filePath)
 {
-    string line;
     ifstream myfile(filePath);
+    string line;
+    vector<string> instLine;
+    vector<vector<string>> codeLine;
 
     if (myfile.is_open())
     {
+        int i = 0;
         while (getline(myfile, line))
         {
-
-            // cout << line << endl;
-            data += line;
+            cout << i <<": "<< line << endl;
+            instLine.push_back(line);
+            i++;
         }
+        codeLine.push_back(instLine);
+        myfile.close();
     }
     else
-        cout << "Unable to open file";
+        cout << "Unable to open file" << endl;
 
-    return data;
+    cout << "\n==== INSTRUCTION LINE:\n" << endl;
+    for (auto i : instLine)
+        cout << i << endl; // this will print all the contents of *features*
+
+    cout << "" << endl;
+    cout << "==== CODE LINE:\n" << endl;
+    for (auto line : codeLine)
+        for (auto i : line)
+        cout << i << endl; // this will print all the contents of *features*
 }
 
 void write_output_file(string inputFilePath, string outputFilePath)
@@ -74,7 +91,7 @@ void write_output_file(string inputFilePath, string outputFilePath)
     ifstream inputFile(inputFilePath);
     ofstream outputFile(outputFilePath);
     string line;
-    
+
     if (outputFile.is_open())
     {
         while (getline(inputFile, line))
@@ -85,7 +102,7 @@ void write_output_file(string inputFilePath, string outputFilePath)
         outputFile.close();
     }
     else
-        cout << "Unable to open file";
+        cout << "Unable to open file" << endl;
 }
 
 void preprocess()
