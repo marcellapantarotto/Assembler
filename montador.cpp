@@ -12,6 +12,7 @@ const int size = 100;
 void input_format();
 void read_input_file(string filePath, char delim);
 void write_output_file(string inputFilePath, string outputFilePath);
+void change_extension(string fileName, string option);
 void print_tokens();
 void preprocess(string fileName, string action);
 void assemble(string fileName, string action);
@@ -99,40 +100,29 @@ void write_output_file(string inputFilePath, string outputFilePath)
 
 void change_extension(string fileName, string option)
 {
-    ofstream outFile; // object for writing to a file
+    ofstream outFile;      // object for writing to a file
+    string str = fileName; // aux string
 
-    string str = fileName; // "this is a test string."
-
-    if(option == "-p")
+    if (option == "-p")
         str.replace(8, 4, ".pre");
-    if(option == "-o")
+    if (option == "-o")
         str.replace(8, 4, ".obj");
 
-    // outFile.open(fileName + ".pre");
     outFile.open(str);
 }
 
 void preprocess(string fileName, string action)
 {
-    // pass file to extension .pre
     cout << "Preprocessing file!\n"
          << endl;
 
-    // ofstream outFile; // object for writing to a file
-
-    // string str = fileName; // "this is a test string."
-    // str.replace(8, 4, ".pre");
-
-    // // outFile.open(fileName + ".pre");
-    // outFile.open(str);
-    change_extension(fileName, action);
+    change_extension(fileName, action); // extension .pre
 }
 
 void assemble(string fileName, string action)
 {
-    // pass file to extension .obj
     cout << "Assembling file!\n"
          << endl;
 
-    change_extension(fileName, action);
+    change_extension(fileName, action); // extension .obj
 }
