@@ -29,10 +29,12 @@ int main(int argc, char *argv[])
     else if (strncmp(argv[1], "-p", 2) == 0)
     {
         preprocess();
+        read_input_file(argv[2], ' ');
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
         assemble();
+        read_input_file(argv[2], ' ');
     }
     else
     {
@@ -41,10 +43,8 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    read_input_file(argv[2], ' ');
     print_tokens();
     // write_output_file("examples/bin.asm", "output.txt");
-    cout << "" << endl;
 
     return 0;
 }
@@ -64,7 +64,6 @@ void read_input_file(string filePath, char delim = ' ')
     {
         while (getline(myfile, token, delim))
         {
-            cout << token << endl;
             tokens.push_back(token);
         }
         myfile.close();
@@ -75,7 +74,7 @@ void read_input_file(string filePath, char delim = ' ')
 
 void print_tokens()
 {
-    cout << "\n==== TOKENS:\n"
+    cout << "\n----- TOKENS: -----\n"
          << endl;
     for (auto i : tokens)
         cout << i << endl; // this will print all the tokens of the program
@@ -101,11 +100,11 @@ void write_output_file(string inputFilePath, string outputFilePath)
 void preprocess()
 {
     // pass file to extension .pre
-    cout << "Preprocessing file!" << endl;
+    cout << "Preprocessing file!\n" << endl;
 }
 
 void assemble()
 {
     // pass file to extension .obj
-    cout << "Assembling file!" << endl;
+    cout << "Assembling file!\n" << endl;
 }
