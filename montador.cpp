@@ -13,7 +13,7 @@ void input_format();
 void read_input_file(string filePath, char delim);
 void write_output_file(string inputFilePath, string outputFilePath);
 void print_tokens();
-void preprocess();
+void preprocess(string fileName);
 void assemble();
 
 vector<string> tokens;
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     }
     else if (strncmp(argv[1], "-p", 2) == 0)
     {
-        preprocess();
+        preprocess(argv[2]);
         read_input_file(argv[2], ' ');
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
@@ -97,14 +97,27 @@ void write_output_file(string inputFilePath, string outputFilePath)
         cout << "Unable to open file" << endl;
 }
 
-void preprocess()
+void preprocess(string fileName)
 {
     // pass file to extension .pre
-    cout << "Preprocessing file!\n" << endl;
+    cout << "Preprocessing file!\n"
+         << endl;
+
+    ifstream inFile;  // object for reading from a file
+    ofstream outFile; // object for writing to a file
+
+    // inFile.open(fileName + ".asm");
+
+    string str = fileName; // "this is a test string."
+    str.replace(8, 4, ".pre");
+
+    // outFile.open(fileName + ".pre");
+    outFile.open(str);
 }
 
 void assemble()
 {
     // pass file to extension .obj
-    cout << "Assembling file!\n" << endl;
+    cout << "Assembling file!\n"
+         << endl;
 }
