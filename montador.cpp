@@ -10,7 +10,7 @@ using namespace std;
 const int size = 100;
 
 void input_format();
-void read_input_file(string filePath);
+void read_input_file(string filePath, char delim);
 void write_output_file(string inputFilePath, string outputFilePath);
 void preprocess();
 void assemble();
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    read_input_file(argv[2]);
+    read_input_file(argv[2], ' ');
     // write_output_file("examples/bin.asm", "output.txt");
 
     return 0;
@@ -53,21 +53,19 @@ void input_format()
     cout << "./montador -p assemble_program.asm \n   or\n./montador -o preprocess_file.pre" << endl;
 }
 
-void read_input_file(string filePath)
+void read_input_file(string filePath, char delim = ' ')
 {
     ifstream myfile(filePath);
-    string line;
+    string token;
     vector<string> instLine;
     vector<vector<string>> codeLine;
 
     if (myfile.is_open())
     {
-        int i = 0;
-        while (getline(myfile, line))
+        while (getline(myfile, token, delim))
         {
-            cout << i <<": "<< line << endl;
-            instLine.push_back(line);
-            i++;
+            cout << token << endl;
+            instLine.push_back(token);
         }
         codeLine.push_back(instLine);
         myfile.close();
@@ -75,15 +73,15 @@ void read_input_file(string filePath)
     else
         cout << "Unable to open file" << endl;
 
-    cout << "\n==== INSTRUCTION LINE:\n" << endl;
-    for (auto i : instLine)
-        cout << i << endl; // this will print all the contents of *features*
+    // cout << "\n==== INSTRUCTION LINE:\n" << endl;
+    // for (auto i : instLine)
+    //     cout << i << endl; // this will print all the contents of instruction line
 
-    cout << "" << endl;
-    cout << "==== CODE LINE:\n" << endl;
-    for (auto line : codeLine)
-        for (auto i : line)
-        cout << i << endl; // this will print all the contents of *features*
+    // cout << "" << endl;
+    // cout << "==== CODE LINE:\n" << endl;
+    // for (auto line : codeLine)
+    //     for (auto i : line)
+    //     cout << i << endl; // this will print all the contents of code line
 }
 
 void write_output_file(string inputFilePath, string outputFilePath)
