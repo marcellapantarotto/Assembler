@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
 
     read_input_file(argv[2], ' ');
     // write_output_file("examples/bin.asm", "output.txt");
+    cout << "" << endl;
 
     return 0;
 }
@@ -67,21 +68,22 @@ void read_input_file(string filePath, char delim = ' ')
             cout << token << endl;
             instLine.push_back(token);
         }
+        
         codeLine.push_back(instLine);
         myfile.close();
     }
     else
         cout << "Unable to open file" << endl;
 
-    // cout << "\n==== INSTRUCTION LINE:\n" << endl;
-    // for (auto i : instLine)
-    //     cout << i << endl; // this will print all the contents of instruction line
+    cout << "\n==== INSTRUCTION LINE:\n" << endl;
+    for (auto i : instLine)
+        cout << i << endl; // this will print all the contents of instruction line
 
-    // cout << "" << endl;
-    // cout << "==== CODE LINE:\n" << endl;
-    // for (auto line : codeLine)
-    //     for (auto i : line)
-    //     cout << i << endl; // this will print all the contents of code line
+    cout << "" << endl;
+    cout << "==== CODE LINE:\n" << endl;
+    for (auto line : codeLine)
+        for (auto i : line)
+        cout << i << " "; // this will print all the contents of code line
 }
 
 void write_output_file(string inputFilePath, string outputFilePath)
