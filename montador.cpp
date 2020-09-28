@@ -13,8 +13,8 @@ void input_format();
 void read_input_file(string filePath, char delim);
 void write_output_file(string inputFilePath, string outputFilePath);
 void print_tokens();
-void preprocess(string fileName);
-void assemble();
+void preprocess(string fileName, string action);
+void assemble(string fileName, string action);
 
 vector<string> tokens;
 
@@ -28,12 +28,12 @@ int main(int argc, char *argv[])
     }
     else if (strncmp(argv[1], "-p", 2) == 0)
     {
-        preprocess(argv[2]);
+        preprocess(argv[2], argv[1]);
         read_input_file(argv[2], ' ');
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
-        assemble();
+        assemble(argv[2], argv[1]);
         read_input_file(argv[2], ' ');
     }
     else
@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    print_tokens();
+    // print_tokens();
     // write_output_file("examples/bin.asm", "output.txt");
 
     return 0;
@@ -97,27 +97,42 @@ void write_output_file(string inputFilePath, string outputFilePath)
         cout << "Unable to open file" << endl;
 }
 
-void preprocess(string fileName)
+void change_extension(string fileName, string option)
 {
-    // pass file to extension .pre
-    cout << "Preprocessing file!\n"
-         << endl;
-
-    ifstream inFile;  // object for reading from a file
     ofstream outFile; // object for writing to a file
 
-    // inFile.open(fileName + ".asm");
-
     string str = fileName; // "this is a test string."
-    str.replace(8, 4, ".pre");
+
+    if(option == "-p")
+        str.replace(8, 4, ".pre");
+    if(option == "-o")
+        str.replace(8, 4, ".obj");
 
     // outFile.open(fileName + ".pre");
     outFile.open(str);
 }
 
-void assemble()
+void preprocess(string fileName, string action)
+{
+    // pass file to extension .pre
+    cout << "Preprocessing file!\n"
+         << endl;
+
+    // ofstream outFile; // object for writing to a file
+
+    // string str = fileName; // "this is a test string."
+    // str.replace(8, 4, ".pre");
+
+    // // outFile.open(fileName + ".pre");
+    // outFile.open(str);
+    change_extension(fileName, action);
+}
+
+void assemble(string fileName, string action)
 {
     // pass file to extension .obj
     cout << "Assembling file!\n"
          << endl;
+
+    change_extension(fileName, action);
 }
