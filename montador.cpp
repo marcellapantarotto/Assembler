@@ -12,11 +12,11 @@ const int size = 100;
 void input_format();
 void read_input_file(string filePath, char delim);
 void write_output_file(string inputFilePath, string outputFilePath);
+void print_tokens();
 void preprocess();
 void assemble();
 
-vector<vector<string>> program(size);
-
+vector<string> tokens;
 
 int main(int argc, char *argv[])
 {
@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     }
 
     read_input_file(argv[2], ' ');
+    print_tokens();
     // write_output_file("examples/bin.asm", "output.txt");
     cout << "" << endl;
 
@@ -58,32 +59,26 @@ void read_input_file(string filePath, char delim = ' ')
 {
     ifstream myfile(filePath);
     string token;
-    vector<string> instLine;
-    vector<vector<string>> codeLine;
 
     if (myfile.is_open())
     {
         while (getline(myfile, token, delim))
         {
             cout << token << endl;
-            instLine.push_back(token);
+            tokens.push_back(token);
         }
-        
-        codeLine.push_back(instLine);
         myfile.close();
     }
     else
         cout << "Unable to open file" << endl;
+}
 
-    cout << "\n==== INSTRUCTION LINE:\n" << endl;
-    for (auto i : instLine)
-        cout << i << endl; // this will print all the contents of instruction line
-
-    cout << "" << endl;
-    cout << "==== CODE LINE:\n" << endl;
-    for (auto line : codeLine)
-        for (auto i : line)
-        cout << i << " "; // this will print all the contents of code line
+void print_tokens()
+{
+    cout << "\n==== TOKENS:\n"
+         << endl;
+    for (auto i : tokens)
+        cout << i << endl; // this will print all the tokens of the program
 }
 
 void write_output_file(string inputFilePath, string outputFilePath)
@@ -95,9 +90,7 @@ void write_output_file(string inputFilePath, string outputFilePath)
     if (outputFile.is_open())
     {
         while (getline(inputFile, line))
-        {
             outputFile << line << endl;
-        }
 
         outputFile.close();
     }
