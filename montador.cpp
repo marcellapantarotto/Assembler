@@ -6,8 +6,6 @@
 #include <vector>
 #include <iomanip>
 
-
-
 using namespace std;
 const int size = 100;
 
@@ -16,10 +14,34 @@ void read_input_file(string filePath, char delim);
 void write_output_file(string inputFilePath, string outputFilePath);
 void change_extension(string fileName, string option);
 void print_tokens();
+void clean_tokens();
 void preprocess(string fileName, string action);
 void assemble(string fileName, string action);
 
-vector<string> tokens;
+vector<string> tokens; // declaring vector of tokens
+vector<string> tokens_after_clean; // declaring vector of tokens
+// vector<int>::iterator it = tokens.begin(); // declaring an iterator
+auto iter = tokens.begin();
+
+class operation
+{
+public:
+    operation(/* args */);
+    ~operation();
+    string mnemonic;
+    int num_operators;
+    int code;
+    int size;
+    bool is_instruction;
+};
+
+operation::operation(/* args */)
+{
+}
+
+operation::~operation()
+{
+}
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +55,9 @@ int main(int argc, char *argv[])
     {
         preprocess(argv[2], argv[1]);
         read_input_file(argv[2], ' ');
+        clean_tokens();
+        cout << "\nafter clean\n" << endl;
+        print_tokens();
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
@@ -66,9 +91,8 @@ void read_input_file(string filePath, char delim = ' ')
     if (myfile.is_open())
     {
         while (getline(myfile, token, delim))
-        {
             tokens.push_back(token);
-        }
+
         myfile.close();
     }
     else
@@ -79,8 +103,27 @@ void print_tokens()
 {
     cout << "\n----- TOKENS: -----\n"
          << endl;
-    for (auto i : tokens)
-        cout << i << endl; // this will print all the tokens of the program
+    // for (auto i : tokens)
+    //     cout << i << endl; // this will print all the tokens of the program
+
+    // another print way
+    for (iter = tokens_after_clean.begin(); iter != tokens_after_clean.end(); ++iter)
+        cout << *iter << endl;
+}
+
+void clean_tokens()
+{   // Accessing the elements using iterators
+    for (iter = tokens.begin(); iter != tokens.end(); ++iter)
+    {
+        string str = *iter;
+        int index = str.length() - 1;
+        // cout << *iter << " ";
+        if (str.back() == ':')
+            str.replace(index, 1, "");
+        if (str.back() == ',')
+            str.replace(index, 1, "");
+        tokens_after_clean.push_back(str);
+    }
 }
 
 void write_output_file(string inputFilePath, string outputFilePath)
