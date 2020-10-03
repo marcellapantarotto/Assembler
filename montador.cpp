@@ -6,6 +6,8 @@
 #include <vector>
 #include <iomanip>
 
+
+
 using namespace std;
 const int size = 100;
 
@@ -102,11 +104,13 @@ void change_extension(string fileName, string option)
 {
     ofstream outFile;      // object for writing to a file
     string str = fileName; // aux string
+    int fileLength = str.length();
+    int index = fileLength - 4;
 
     if (option == "-p")
-        str.replace(8, 4, ".pre");
+        str.replace(index, 4, ".pre");
     if (option == "-o")
-        str.replace(8, 4, ".obj");
+        str.replace(index, 4, ".obj");
 
     outFile.open(str);
 }
