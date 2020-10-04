@@ -12,9 +12,9 @@ const int size = 100;
 void inputFormat();
 void readInputFile(string filePath, char delim);
 void writeOutputFile(string inputFilePath, string outputFilePath);
-string changeExtension(string fileName, string option);
+string changeExtension(string option, string fileName);
 void printTokens();
-void cleanTokens();
+void cleanTokens(string option);
 void preprocess(string fileName, string action);
 void assemble(string fileName, string action);
 
@@ -45,7 +45,6 @@ Instruction::~Instruction()
 {
 }
 
-
 int main(int argc, char *argv[])
 {
     if (argc != 3)
@@ -58,10 +57,7 @@ int main(int argc, char *argv[])
     {
         preprocess(argv[1], argv[2]);
         readInputFile(argv[2], ' ');
-        cleanTokens();
-        // cout << "\nafter clean\n"
-        //      << endl;
-        // printTokens();
+        cleanTokens(argv[1]);
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
@@ -74,9 +70,6 @@ int main(int argc, char *argv[])
         inputFormat();
         return 1;
     }
-
-    // printTokens();
-    // writeOutputFile("examples/bin.asm", "output.txt");
 
     return 0;
 }
@@ -115,19 +108,62 @@ void printTokens()
         cout << *iter << endl;
 }
 
-void cleanTokens()
+void cleanTokens(string option)
 { // Accessing the elements using iterators
     for (iter = tokens.begin(); iter != tokens.end(); ++iter)
     {
         string str = *iter;
         int index = str.length() - 1;
         // cout << *iter << " ";
-        if (str.back() == ':')
-            str.replace(index, 1, "");
-        if (str.back() == ',')
-            str.replace(index, 1, "");
+        if (option == "-o")
+        {
+            if (str.back() == ':')
+                str.replace(index, 1, "");
+            if (str.back() == ',')
+                str.replace(index, 1, "");
+        }
+
+        // if (option == "-p")
+        // {
+        //     if (str.back() == ';')
+        //         str.replace(index, 1, "");
+        // }
+
         tokens_after_clean.push_back(str);
     }
+}
+
+void removeComments(string inputFilePath, string outputFilePath)
+{
+    ifstream inputFile(inputFilePath);
+    ofstream outputFile(outputFilePath);
+    string line;
+
+    int numComment = 0;
+    int positionComment;
+
+    if (outputFile.is_open())
+    {
+        while (getline(inputFile, line))
+        {
+            if (line.find(";"))
+            {
+                numComment += 1;
+                positionComment = line.find(";");
+
+                if (positionComment != -1)
+                {
+                    line.erase(positionComment, line.size());
+                }
+            }
+            outputFile << line << endl;
+        }
+        outputFile.close();
+    }
+    else
+        cout << "Unable to open file" << endl;
+
+    cout << "Number of Comments = " << numComment << endl;
 }
 
 void writeOutputFile(string inputFilePath, string outputFilePath)
@@ -149,7 +185,7 @@ void writeOutputFile(string inputFilePath, string outputFilePath)
 
 string changeExtension(string option, string fileNameInput)
 {
-    ofstream outFile;      // object for writing to a file
+    ofstream outFile;           // object for writing to a file
     string str = fileNameInput; // aux string
     int fileLength = str.length();
     int index = fileLength - 4;
@@ -171,7 +207,8 @@ void preprocess(string action, string inputFile)
 
     string outputFile = changeExtension(action, inputFile); // extension .pre
 
-    writeOutputFile(inputFile, outputFile);
+    removeComments(inputFile, outputFile);
+    // writeOutputFile(inputFile, outputFile);
 }
 
 void assemble(string action, string fileName)
@@ -195,9 +232,8 @@ void assemble(string action, string fileName)
     inst[13] = new Instruction("OUTPUT", "13", 1, 2);
     inst[14] = new Instruction("STOP", "14", 0, 1);
 
-    for(auto i : inst)
+    for (auto i : inst)
         cout << i << endl;
 
     changeExtension(action, fileName); // extension .obj
 }
-
