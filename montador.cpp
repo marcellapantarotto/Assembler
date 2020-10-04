@@ -82,25 +82,30 @@ void initDirectives()
     };
 }
 
-void replacingEQU()
-{
+void getLabelEQU()
+{   
     int positionCount = 0;
+    int labelSize = 0;
+    string label = "";
+    
     for (iter = tokens.begin(); iter != tokens.end(); ++iter)
     {
-        string str = *iter;
-        int length = str.length();
+        label = *iter;
+        int length = label.length();
 
         for (int i = 0; i < length; i++)
         {
             positionCount += 1;
             if (iter->find(":")){
+                labelSize = iter->size()-1;
                 break;
             }
-        }    
+        }
+        // str.replace(labelSize, 1, "");
     }
-    cout << "EQU Position Count = " << positionCount << endl;
-
-
+    cout << "EQU Position Count = " << positionCount << endl;  
+    cout << "Label Size = " << labelSize << endl;   
+    cout << "Label = " << label << endl;  
 }
 
 void initInstructions()
@@ -261,7 +266,7 @@ void preprocess(string action, string inputFile)
     removeComments(inputFile, outputFile);
     cout << "\nReplacing EQU\n" << endl;
     readInputFile(inputFile);
-    replacingEQU();
+    getLabelEQU();
     // writeOutputFile(inputFile, outputFile);
 }
 
