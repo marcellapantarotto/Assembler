@@ -9,6 +9,8 @@
 using namespace std;
 const int size = 100;
 
+void initDirectives();
+void initInstructions();
 void inputFormat();
 void readInputFile(string filePath, char delim);
 void writeOutputFile(string inputFilePath, string outputFilePath);
@@ -23,28 +25,6 @@ vector<string> tokens_after_clean; // tokens without special caracters
 auto iter = tokens.begin();        // iterator
 // auto iter = tokens_after_clean.begin();        // iterator
 
-class Instruction
-{
-public:
-    Instruction(string mnemonic, string opcode, int operands, int length);
-    ~Instruction();
-
-    string mnemonic, opcode;
-    int operands, length;
-};
-
-Instruction::Instruction(string mnemonic, string opcode, int operands, int length)
-{
-    this->mnemonic = mnemonic;
-    this->opcode = opcode;
-    this->operands = operands;
-    this->length = length;
-}
-
-Instruction::~Instruction()
-{
-}
-
 int main(int argc, char *argv[])
 {
     if (argc != 3)
@@ -55,12 +35,14 @@ int main(int argc, char *argv[])
     }
     else if (strncmp(argv[1], "-p", 2) == 0)
     {
+        initDirectives();
         preprocess(argv[1], argv[2]);
         readInputFile(argv[2], ' ');
         cleanTokens(argv[1]);
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
+        initInstructions();
         assemble(argv[1], argv[2]);
         readInputFile(argv[2], ' ');
     }
@@ -72,6 +54,55 @@ int main(int argc, char *argv[])
     }
 
     return 0;
+}
+
+void initDirectives()
+{
+    typedef tuple<string, int, int> directive;
+    vector<directive> libDirectives;
+
+    libDirectives.push_back(directive("SECTION", 1, 0));
+    libDirectives.push_back(directive("SPACE", 0, 1));
+    libDirectives.push_back(directive("CONST", 1, 1));
+    libDirectives.push_back(directive("EQU", 1, 0));
+    libDirectives.push_back(directive("IF", 1, 0));
+    libDirectives.push_back(directive("MACRO", 0, 0));
+    libDirectives.push_back(directive("ENDMACRO", 0, 0));
+
+    for (directive d : libDirectives)
+    {
+        cout << get<0>(d) << ' ';
+        cout << get<1>(d) << ' ';
+        cout << get<2>(d) << '\n';
+    };
+}
+
+void initInstructions()
+{
+    typedef tuple<string, string, int, int> instruction;
+    vector<instruction> libInstructions;
+
+    libInstructions.push_back(instruction("ADD", "01", 1, 2));
+    libInstructions.push_back(instruction("SUB", "02", 1, 2));
+    libInstructions.push_back(instruction("MULT", "03", 1, 2));
+    libInstructions.push_back(instruction("DIV", "04", 1, 2));
+    libInstructions.push_back(instruction("JMP", "05", 1, 2));
+    libInstructions.push_back(instruction("JMPN", "06", 1, 2));
+    libInstructions.push_back(instruction("JMPP", "07", 1, 2));
+    libInstructions.push_back(instruction("JMPZ", "08", 1, 2));
+    libInstructions.push_back(instruction("COPY", "09", 2, 3));
+    libInstructions.push_back(instruction("LOAD", "10", 1, 2));
+    libInstructions.push_back(instruction("STORE", "11", 1, 2));
+    libInstructions.push_back(instruction("INPUT", "12", 1, 2));
+    libInstructions.push_back(instruction("OUTPUT", "13", 1, 2));
+    libInstructions.push_back(instruction("STOP", "14", 0, 1));
+
+    for (instruction i : libInstructions)
+    {
+        cout << get<0>(i) << ' ';
+        cout << get<1>(i) << ' ';
+        cout << get<2>(i) << '\n';
+    };
 }
 
 void inputFormat()
@@ -133,6 +164,7 @@ void cleanTokens(string option)
     }
 }
 
+// removes comments declared with ';'
 void removeComments(string inputFilePath, string outputFilePath)
 {
     ifstream inputFile(inputFilePath);
@@ -215,25 +247,6 @@ void assemble(string action, string fileName)
 {
     cout << "Assembling file!\n"
          << endl;
-
-    Instruction *inst[15];
-    inst[1] = new Instruction("ADD", "01", 1, 2);
-    inst[2] = new Instruction("SUB", "02", 1, 2);
-    inst[3] = new Instruction("MULT", "03", 1, 2);
-    inst[4] = new Instruction("DIV", "04", 1, 2);
-    inst[5] = new Instruction("JMP", "05", 1, 2);
-    inst[6] = new Instruction("JMPN", "06", 1, 2);
-    inst[7] = new Instruction("JMPP", "07", 1, 2);
-    inst[8] = new Instruction("JMPZ", "08", 1, 2);
-    inst[9] = new Instruction("COPY", "09", 2, 3);
-    inst[10] = new Instruction("LOAD", "10", 1, 2);
-    inst[11] = new Instruction("STORE", "11", 1, 2);
-    inst[12] = new Instruction("INPUT", "12", 1, 2);
-    inst[13] = new Instruction("OUTPUT", "13", 1, 2);
-    inst[14] = new Instruction("STOP", "14", 0, 1);
-
-    for (auto i : inst)
-        cout << i << endl;
 
     changeExtension(action, fileName); // extension .obj
 }
