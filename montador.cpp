@@ -148,12 +148,12 @@ void removeComments(string inputFilePath, string outputFilePath)
         {
             if (line.find(";"))
             {
-                numComment += 1;
                 positionComment = line.find(";");
 
                 if (positionComment != -1)
                 {
                     line.erase(positionComment, line.size());
+                    numComment += 1;
                 }
             }
             outputFile << line << endl;
