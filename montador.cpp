@@ -12,7 +12,7 @@ const int size = 100;
 void inputFormat();
 void readInputFile(string filePath, char delim);
 void writeOutputFile(string inputFilePath, string outputFilePath);
-void changeExtension(string fileName, string option);
+string changeExtension(string fileName, string option);
 void printTokens();
 void cleanTokens();
 void preprocess(string fileName, string action);
@@ -56,16 +56,16 @@ int main(int argc, char *argv[])
     }
     else if (strncmp(argv[1], "-p", 2) == 0)
     {
-        preprocess(argv[2], argv[1]);
+        preprocess(argv[1], argv[2]);
         readInputFile(argv[2], ' ');
         cleanTokens();
-        cout << "\nafter clean\n"
-             << endl;
-        printTokens();
+        // cout << "\nafter clean\n"
+        //      << endl;
+        // printTokens();
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
-        assemble(argv[2], argv[1]);
+        assemble(argv[1], argv[2]);
         readInputFile(argv[2], ' ');
     }
     else
@@ -147,10 +147,10 @@ void writeOutputFile(string inputFilePath, string outputFilePath)
         cout << "Unable to open file" << endl;
 }
 
-void changeExtension(string fileName, string option)
+string changeExtension(string option, string fileNameInput)
 {
     ofstream outFile;      // object for writing to a file
-    string str = fileName; // aux string
+    string str = fileNameInput; // aux string
     int fileLength = str.length();
     int index = fileLength - 4;
 
@@ -160,17 +160,21 @@ void changeExtension(string fileName, string option)
         str.replace(index, 4, ".obj");
 
     outFile.open(str);
+
+    return str;
 }
 
-void preprocess(string fileName, string action)
+void preprocess(string action, string inputFile)
 {
     cout << "Preprocessing file!\n"
          << endl;
 
-    changeExtension(fileName, action); // extension .pre
+    string outputFile = changeExtension(action, inputFile); // extension .pre
+
+    writeOutputFile(inputFile, outputFile);
 }
 
-void assemble(string fileName, string action)
+void assemble(string action, string fileName)
 {
     cout << "Assembling file!\n"
          << endl;
@@ -194,6 +198,6 @@ void assemble(string fileName, string action)
     for(auto i : inst)
         cout << i << endl;
 
-    changeExtension(fileName, action); // extension .obj
+    changeExtension(action, fileName); // extension .obj
 }
 
