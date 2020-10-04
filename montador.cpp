@@ -6,17 +6,22 @@
 #include <vector>
 #include <iomanip>
 
+#define maxNumMacros 2
+#define masArgsMacro 2
+
 using namespace std;
 const int size = 100;
 
 void initDirectives();
+void replacingEQU();
 void initInstructions();
 void inputFormat();
-void readInputFile(string filePath, char delim);
+void readInputFile(string filePath);
+void removeComments(string inputFilePath, string outputFilePath);
 void writeOutputFile(string inputFilePath, string outputFilePath);
 string changeExtension(string option, string fileName);
 void printTokens();
-void cleanTokens(string option);
+void cleanTokens();
 void preprocess(string fileName, string action);
 void assemble(string fileName, string action);
 
@@ -37,14 +42,14 @@ int main(int argc, char *argv[])
     {
         initDirectives();
         preprocess(argv[1], argv[2]);
-        readInputFile(argv[2], ' ');
-        cleanTokens(argv[1]);
+        readInputFile(argv[2]);
+        // cleanTokens();
     }
     else if (strncmp(argv[1], "-o", 2) == 0)
     {
         initInstructions();
         assemble(argv[1], argv[2]);
-        readInputFile(argv[2], ' ');
+        readInputFile(argv[2]);
     }
     else
     {
@@ -60,7 +65,7 @@ void initDirectives()
 {
     typedef tuple<string, int, int> directive;
     vector<directive> libDirectives;
-
+    // mnemonic, operands, length
     libDirectives.push_back(directive("SECTION", 1, 0));
     libDirectives.push_back(directive("SPACE", 0, 1));
     libDirectives.push_back(directive("CONST", 1, 1));
@@ -77,11 +82,32 @@ void initDirectives()
     };
 }
 
+void replacingEQU()
+{
+    int positionCount = 0;
+    for (iter = tokens.begin(); iter != tokens.end(); ++iter)
+    {
+        string str = *iter;
+        int length = str.length();
+
+        for (int i = 0; i < length; i++)
+        {
+            positionCount += 1;
+            if (iter->find(":")){
+                break;
+            }
+        }    
+    }
+    cout << "EQU Position Count = " << positionCount << endl;
+
+
+}
+
 void initInstructions()
 {
     typedef tuple<string, string, int, int> instruction;
     vector<instruction> libInstructions;
-
+    // mnemonic, opcode, operands, length
     libInstructions.push_back(instruction("ADD", "01", 1, 2));
     libInstructions.push_back(instruction("SUB", "02", 1, 2));
     libInstructions.push_back(instruction("MULT", "03", 1, 2));
@@ -111,8 +137,9 @@ void inputFormat()
     cout << "./montador -p assemble_program.asm \n   or\n./montador -o preprocess_file.pre" << endl;
 }
 
-void readInputFile(string filePath, char delim = ' ')
+void readInputFile(string filePath)
 {
+    char delim = ' ';
     ifstream myfile(filePath);
     string token;
 
@@ -139,26 +166,18 @@ void printTokens()
         cout << *iter << endl;
 }
 
-void cleanTokens(string option)
+void cleanTokens()
 { // Accessing the elements using iterators
     for (iter = tokens.begin(); iter != tokens.end(); ++iter)
     {
         string str = *iter;
         int index = str.length() - 1;
         // cout << *iter << " ";
-        if (option == "-o")
-        {
-            if (str.back() == ':')
-                str.replace(index, 1, "");
-            if (str.back() == ',')
-                str.replace(index, 1, "");
-        }
 
-        // if (option == "-p")
-        // {
-        //     if (str.back() == ';')
-        //         str.replace(index, 1, "");
-        // }
+        if (str.back() == ':')
+            str.replace(index, 1, "");
+        if (str.back() == ',')
+            str.replace(index, 1, "");
 
         tokens_after_clean.push_back(str);
     }
@@ -240,6 +259,9 @@ void preprocess(string action, string inputFile)
     string outputFile = changeExtension(action, inputFile); // extension .pre
 
     removeComments(inputFile, outputFile);
+    cout << "\nReplacing EQU\n" << endl;
+    readInputFile(inputFile);
+    replacingEQU();
     // writeOutputFile(inputFile, outputFile);
 }
 
